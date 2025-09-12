@@ -1,0 +1,26 @@
+import { auth, db } from "./firebase-config.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const q = query(collection(db, "bookings"), where("userId", "==", user.uid));
+  const snapshot = await getDocs(q);
+
+  const container = document.getElementById("booking-list");
+  snapshot.forEach((doc) => {
+    const booking = doc.data();
+    const div = document.createElement("div");
+    div.className = "booking-card";
+    div.innerHTML = `
+      <h3>Room: ${booking.roomId}</h3>
+      <p>Check-in: ${booking.checkin}</p>
+      <p>Check-out: ${booking.checkout}</p>
+      <p>Status: ${booking.status}</p>
+    `;
+    container.appendChild(div);
+  });
+});
