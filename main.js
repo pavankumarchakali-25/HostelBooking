@@ -1,18 +1,23 @@
-import { db } from "./firebase-config.js";
+import { db } from "./firebase.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-const container = document.getElementById("room-list");
+const roomList = document.getElementById("room-list");
 
-const querySnapshot = await getDocs(collection(db, "rooms"));
-querySnapshot.forEach((doc) => {
-  const room = doc.data();
-  const div = document.createElement("div");
-  div.className = "room-card";
-  div.innerHTML = `
-    <h3>${room.hostel} - ${room.room_type}</h3>
-    <p>Price: ₹${room.price_per_night}</p>
-    <p>Facilities: ${room.facilities.join(", ")}</p>
-    <a href="room.html?id=${doc.id}">View Details</a>
-  `;
-  container.appendChild(div);
-});
+async function loadRooms() {
+  const querySnapshot = await getDocs(collection(db, "rooms"));
+  roomList.innerHTML = "";
+  querySnapshot.forEach((doc) => {
+    const room = doc.data();
+    roomList.innerHTML += `
+      <div class="room-card">
+        <h3>${room.name} - ${room.type}</h3>
+        <p>Price: ₹${room.price} per night</p>
+        <p>Capacity: ${room.capacity} persons</p>
+        <p>Status: ${room.available ? "✅ Available" : "❌ Booked"}</p>
+        <a class="btn" href="room.html?id=${doc.id}">View Details</a>
+      </div>
+    `;
+  });
+}
+
+loadRooms();
