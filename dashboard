@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>My Bookings</h1>
+  </header>
+
+  <div class="container">
+    <h2>Your Reservations</h2>
+    <div id="booking-list"></div>
+  </div>
+<a href="index.html" class="back-btn">⬅ Back</a>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>
