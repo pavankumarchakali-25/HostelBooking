@@ -55,3 +55,16 @@ button, .btn {
 button:hover, .btn:hover {
   background: #0056b3;
 }
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  background: #6c757d;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #5a6268;
+}
