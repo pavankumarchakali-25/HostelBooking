@@ -5,9 +5,10 @@ const roomsList = document.getElementById("room-list");
 
 async function loadRooms() {
   try {
-    const querySnapshot = await getDocs(collection(db, "rooms"));
+    const querySnapshot = await getDocs(collection(db, "room"));
     roomsList.innerHTML = "";
     querySnapshot.forEach((doc) => {
+      console.log("Room data:", doc.id, doc.data()); // 👈 debug log
       const room = doc.data();
       roomsList.innerHTML += `
         <div class="room-card">
