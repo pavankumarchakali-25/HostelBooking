@@ -19,8 +19,8 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
   try {
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
-      room.name,
-      room.type          
+      roomName:room.name,
+      roomType:room.type,         
       roomId,
       checkin,
       checkout,
