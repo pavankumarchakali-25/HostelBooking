@@ -25,6 +25,7 @@ async function loadRoom() {
 
       roomDetails.innerHTML = `
         <h2>${room.name}</h2>
+        <img src="${room.image}" alt="${room.name}" style="width:300px; border-radius:10px;" />
         <p>Type: ${room.type}</p>
         <p>Price: ₹${room.price}</p>
         <p>Capacity: ${room.capacity}</p>
