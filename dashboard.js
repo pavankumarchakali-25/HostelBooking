@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-config.js";
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
