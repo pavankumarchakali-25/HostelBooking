@@ -1,4 +1,4 @@
-import { db } from "./firebase.js";
+import { db } from "./firebase-config.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const roomDetails = document.getElementById("room-details");
