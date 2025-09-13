@@ -15,7 +15,17 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
     window.location.href = "login.html";
     return;
   }
-const room = roomsnap.data();
+try {
+    // ✅ Fetch the room first
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+
+    if (!roomSnap.exists()) {
+      alert("❌ Room not found!");
+      return;
+    }
+
+    const room = roomSnap.data(); 
   try {
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
