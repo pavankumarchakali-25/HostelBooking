@@ -2,7 +2,7 @@ import { auth, db } from "./firebase-config.js";
 import { addDoc, collection } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
+const roomId = urlParams.get("id");
 
 document.getElementById("booking-form").addEventListener("submit", async (e) => {
   e.preventDefault();
