@@ -15,7 +15,7 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
     window.location.href = "login.html";
     return;
   }
-
+const room = roomsnap.data();
   try {
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
