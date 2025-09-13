@@ -14,7 +14,7 @@ async function loadRoom() {
   }
 
   try {
-    const roomRef = doc(db, "rooms", roomId);
+    const roomRef = doc(db, "room", roomId);
     const roomSnap = await getDoc(roomRef);
 
     if (roomSnap.exists()) {
