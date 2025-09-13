@@ -14,6 +14,8 @@ async function loadRoom() {
   }
 
   try {
+    console.log("Fetching doc from collection: rooms, with ID:", roomId);
+
     const roomRef = doc(db, "room", roomId);
     const roomSnap = await getDoc(roomRef);
 
