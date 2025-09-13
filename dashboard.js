@@ -20,6 +20,9 @@ auth.onAuthStateChanged(async (user) => {
       <p>Check-in: ${booking.checkin}</p>
       <p>Check-out: ${booking.checkout}</p>
       <p>Status: ${booking.status}</p>
+      <p>Room: ${booking.roomName}</p>
+      <p>Type: ${booking.roomType}</p>
+
     `;
     container.appendChild(div);
   });
