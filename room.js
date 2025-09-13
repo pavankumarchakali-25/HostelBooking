@@ -1,5 +1,5 @@
 import { db } from "./firebase-config.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const roomDetails = document.getElementById("room-details");
 const urlParams = new URLSearchParams(window.location.search);
