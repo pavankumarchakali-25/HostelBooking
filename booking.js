@@ -37,9 +37,8 @@ try {
       status: "confirmed",
       createdAt: new Date()
     });
-    alert("Booking Confirmed!");
+    alert(`✅ Booking confirmed for ${room.name}`);
     window.location.href = "dashboard.html";
-  } catch (err) {
-    alert(err.message);
+  } catch (err) {alert("⚠️ Error booking room. Check console.");
   }
 });
