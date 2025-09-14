@@ -31,6 +31,8 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
     // ✅ Add booking with room details
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
+      userName: user.displayName || user.email.split("@")[0], // fallback if no displayName
+  userEmail: user.email,
       roomId,
       roomName: room.name || "Unnamed Room",
       roomType: room.type || "N/A",
