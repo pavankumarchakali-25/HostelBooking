@@ -16,7 +16,7 @@ auth.onAuthStateChanged(async (user) => {
     if(booking==null) {
     const div = document.createElement("div");
     div.className = "booking-card";
-      div.innerHTML = ' <p>No Bookings</p>;
+      div.innerHTML = ' <p>No Bookings</p>';
         container.appendChild(div);
     } else{
       const div = document.createElement("div");
