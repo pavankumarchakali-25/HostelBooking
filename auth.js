@@ -4,9 +4,10 @@ import {
   signInWithEmailAndPassword, 
   signOut,
   GoogleAuthProvider, 
-  signInWithPopup 
+  signInWithPopup,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { doc, setDoc,getdoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 // Google Login
 if (document.getElementById("google-login-btn")) {
@@ -33,8 +34,6 @@ if (document.getElementById("google-login-btn")) {
   });
 }
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const authBtn = document.getElementById("auth-btn");
 const welcomeText = document.getElementById("welcome-text");
