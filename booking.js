@@ -18,7 +18,7 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
 
   try {
     // ✅ Fetch the room first
-    const roomRef = doc(db, "rooms", roomId);
+    const roomRef = doc(db, "room", roomId);
     const roomSnap = await getDoc(roomRef);
 
     if (!roomSnap.exists()) {
