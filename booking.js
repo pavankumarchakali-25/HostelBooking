@@ -42,6 +42,10 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
       createdAt: new Date()
     });
 
+    await updateDoc(roomRef, {
+      available: false
+    });
+
     alert(`✅ Booking confirmed for ${room.name}`);
     window.location.href = "dashboard.html";
 
