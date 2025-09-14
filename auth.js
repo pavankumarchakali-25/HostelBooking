@@ -33,16 +33,30 @@ if (document.getElementById("google-login-btn")) {
   });
 }
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const authBtn = document.getElementById("auth-btn");
+const welcomeText = document.getElementById("welcome-text");
 
-if (authBtn) {
-  onAuthStateChanged(auth, (user) => {
+if (authBtn && welcomeText) {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // ✅ User is logged in
+      // ✅ User logged in
+      let userName = user.displayName; // from Google login
+      if (!userName) {
+        // if signed up with email, fetch from Firestore
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          userName = userSnap.data().name;
+        }
+      }
+
+      welcomeText.textContent = `Welcome, ${userName || "User"}`;
+
       authBtn.textContent = "Logout";
-      authBtn.href = "#"; // prevent redirect
+      authBtn.href = "#"; // disable link
       authBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         await signOut(auth);
@@ -50,6 +64,7 @@ if (authBtn) {
       });
     } else {
       // ❌ User not logged in
+      welcomeText.textContent = "";
       authBtn.textContent = "Login";
       authBtn.href = "login.html";
     }
