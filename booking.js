@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-config.js";
-import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { addDoc, collection, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("id");
@@ -15,7 +15,8 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
     window.location.href = "login.html";
     return;
   }
-try {
+
+  try {
     // ✅ Fetch the room first
     const roomRef = doc(db, "rooms", roomId);
     const roomSnap = await getDoc(roomRef);
@@ -25,20 +26,25 @@ try {
       return;
     }
 
-    const room = roomSnap.data(); 
-  try {
+    const room = roomSnap.data();
+
+    // ✅ Add booking with room details
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
-      roomName:room.name,
-      roomType:room.type,         
       roomId,
+      roomName: room.name || "Unnamed Room",
+      roomType: room.type || "N/A",
       checkin,
       checkout,
       status: "confirmed",
       createdAt: new Date()
     });
+
     alert(`✅ Booking confirmed for ${room.name}`);
     window.location.href = "dashboard.html";
-  } catch (err) {alert("⚠️ Error booking room. Check console.");
+
+  } catch (err) {
+    console.error("🔥 Error booking room:", err);
+    alert("⚠️ Error booking room. Check console.");
   }
 });
