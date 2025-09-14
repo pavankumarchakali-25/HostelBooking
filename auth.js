@@ -32,3 +32,26 @@ if (document.getElementById("google-login-btn")) {
     }
   });
 }
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const authBtn = document.getElementById("auth-btn");
+
+if (authBtn) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // ✅ User is logged in
+      authBtn.textContent = "Logout";
+      authBtn.href = "#"; // prevent redirect
+      authBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await signOut(auth);
+        window.location.href = "login.html";
+      });
+    } else {
+      // ❌ User not logged in
+      authBtn.textContent = "Login";
+      authBtn.href = "login.html";
+    }
+  });
+}
