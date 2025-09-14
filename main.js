@@ -12,6 +12,7 @@ async function loadRooms() {
       const room = doc.data();
       roomsList.innerHTML += `
         <div class="room-card">
+        <img src="${room.image}" alt="${room.name}" class="room-img">
           <h3>${room.name}</h3>
           <p>${room.description}</p>
           <p>Price: ${room.price}</p>
