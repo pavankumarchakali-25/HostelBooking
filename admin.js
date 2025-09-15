@@ -47,26 +47,59 @@ onAuthStateChanged(auth, async (user) => {
         <p>Status: <strong>${booking.status}</strong></p>
       `;
 
-      // ✅ Checkout approval button
-      if (booking.status === "checkout-requested") {
-        const btn = document.createElement("button");
-        btn.innerText = "Approve Checkout ✅";
-        btn.onclick = async () => {
-          await updateDoc(doc(db, "bookings", booking.id), {
-            status: "checked-out"
-          });
+      // set this to your actual rooms collection name: "room" or "rooms"
+const ROOMS_COLLECTION = "room"; // <-- change if needed
 
-          if (booking.roomId) {
-            await updateDoc(doc(db, "room", booking.roomId), {
-              available: true
-            });
-          }
+if (booking.status === "checkout-requested") {
+  const btn = document.createElement("button");
+  btn.innerText = "Approve Checkout ✅";
+  btn.onclick = async () => {
+    btn.disabled = true;
+    btn.innerText = "Processing...";
 
-          alert(`Checkout approved for ${booking.userName || booking.userEmail}`);
-          window.location.reload();
-        };
-        div.appendChild(btn);
+    try {
+      console.log("Attempting to approve checkout for booking:", booking.id, "roomId:", booking.roomId);
+
+      // 1) Ensure booking exists
+      const bookingRef = doc(db, "bookings", booking.id);
+      const bookingSnap = await getDoc(bookingRef);
+      if (!bookingSnap.exists()) {
+        throw new Error("Booking doc not found");
       }
+
+      // 2) Check room doc exists
+      if (!booking.roomId) {
+        throw new Error("booking.roomId missing");
+      }
+      const roomRef = doc(db, ROOMS_COLLECTION, booking.roomId);
+      const roomSnap = await getDoc(roomRef);
+      if (!roomSnap.exists()) {
+        throw new Error(`Room doc not found at ${ROOMS_COLLECTION}/${booking.roomId}`);
+      }
+
+      // 3) Update booking status
+      await updateDoc(bookingRef, { status: "checked-out" });
+      console.log("Booking status updated");
+
+      // 4) Update room availability
+      await updateDoc(roomRef, { available: true });
+      console.log(`Room ${booking.roomId} set to available: true`);
+
+      // 5) Update UI (no reload)
+      alert(`✅ Checkout approved for ${booking.userName || booking.userEmail}`);
+      const statusEl = div.querySelector("p strong");
+      if (statusEl) statusEl.textContent = "checked-out";
+      btn.remove();
+
+    } catch (err) {
+      console.error("Approve checkout error:", err);
+      alert("Error approving checkout: " + (err.message || err));
+      btn.disabled = false;
+      btn.innerText = "Approve Checkout ✅";
+    }
+  };
+  div.appendChild(btn);
+}
 
       // ✅ Delete booking button
       const deleteBtn = document.createElement("button");
