@@ -57,7 +57,7 @@ onAuthStateChanged(auth, async (user) => {
           });
 
           if (booking.roomId) {
-            await updateDoc(doc(db, "rooms", booking.roomId), {
+            await updateDoc(doc(db, "room", booking.roomId), {
               available: true
             });
           }
