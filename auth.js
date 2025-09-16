@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { doc, setDoc,getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 // Email/Password Signup
 if (document.getElementById("signup-form")) {
@@ -33,7 +33,8 @@ if (document.getElementById("signup-form")) {
       alert("✅ Account created successfully!");
       window.location.href = "index.html";
 
-    } catch (err) {
+    } catch (err)
+      {
       console.error("🔥 Signup error:", err);
       alert("❌ " + err.message);
     }
@@ -67,13 +68,22 @@ if (document.getElementById("google-login-btn")) {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Save user in Firestore if new
-      await setDoc(doc(db, "users", user.uid), {
-        name: user.displayName,
-        email: user.email,
-        role: "user",
-        createdAt: new Date()
-      }, { merge: true });  // merge avoids overwriting
+      // --- Start of Fix ---
+      // Check if the user document already exists
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      // Only create a new document if one doesn't already exist
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          name: user.displayName,
+          email: user.email,
+          role: "user", // Set role to "user" only for brand new accounts
+          createdAt: new Date()
+        });
+      }
+      // If the user already exists, we do nothing, preserving their current role.
+      // --- End of Fix ---
 
       alert("✅ Logged in with Google!");
       window.location.href = "index.html";
@@ -83,7 +93,6 @@ if (document.getElementById("google-login-btn")) {
     }
   });
 }
-
 
 const authBtn = document.getElementById("auth-btn");
 const welcomeText = document.getElementById("welcome-text");
