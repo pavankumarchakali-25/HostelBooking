@@ -8,45 +8,48 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 🔍 Get all bookings for this user
-  const q = query(collection(db, "bookings"), where("userId", "==", user.uid));
-  const snapshot = await getDocs(q);
+  try {
+    const q = query(collection(db, "bookings"), where("userId", "==", user.uid));
+    const snapshot = await getDocs(q);
 
-  const container = document.getElementById("booking-list");
+    const container = document.getElementById("booking-list");
 
-  if (snapshot.empty) {
-    container.innerHTML = "<p>No bookings found</p>";
-    return;
-  }
-
-  snapshot.forEach((docSnap) => {
-    const booking = docSnap.data();
-    const div = document.createElement("div");
-    div.className = "booking-card";
-
-    div.innerHTML = `
-      <h3>Room: ${booking.roomName || booking.roomId}</h3>
-      <p>Customer: ${booking.userName || booking.userEmail}</p>
-      <p>Check-in: ${booking.checkin}</p>
-      <p>Check-out: ${booking.checkout}</p>
-      <p>Status: ${booking.status}</p>
-      <p>Type: ${booking.roomType}</p>
-    `;
-
-    // ✅ If booking is active → allow checkout request
-    if (booking.status === "confirmed") {
-      const btn = document.createElement("button");
-      btn.innerText = "Request Checkout";
-      btn.onclick = async () => {
-        await updateDoc(doc(db, "bookings", docSnap.id), {
-          status: "checkout-requested"
-        });
-        alert("✅ Checkout request sent to admin.");
-        window.location.reload();
-      };
-      div.appendChild(btn);
+    if (snapshot.empty) {
+      container.innerHTML = "<p>No bookings found</p>";
+      return;
     }
 
-    container.appendChild(div);
-  });
+    snapshot.forEach((docSnap) => {
+      const booking = docSnap.data();
+      const div = document.createElement("div");
+      div.className = "booking-card";
+
+      div.innerHTML = `
+        <h3>Room: ${booking.roomName || booking.roomId}</h3>
+        <p>Customer: ${booking.userName || booking.userEmail}</p>
+        <p>Check-in: ${booking.checkin}</p>
+        <p>Check-out: ${booking.checkout}</p>
+        <p>Status: ${booking.status}</p>
+        <p>Type: ${booking.roomType}</p>
+      `;
+
+      if (booking.status === "confirmed") {
+        const btn = document.createElement("button");
+        btn.innerText = "Request Checkout";
+        btn.onclick = async () => {
+          await updateDoc(doc(db, "bookings", docSnap.id), {
+            status: "checkout-requested"
+          });
+          alert("✅ Checkout request sent to admin.");
+          window.location.reload();
+        };
+        div.appendChild(btn);
+      }
+
+      container.appendChild(div);
+    });
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    alert("Could not fetch bookings. Please try again later.");
+  }
 });
