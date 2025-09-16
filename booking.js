@@ -8,6 +8,13 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
   e.preventDefault();
   const checkin = document.getElementById("checkin").value;
   const checkout = document.getElementById("checkout").value;
+  
+  // --- Start of added code ---
+  if (new Date(checkout) <= new Date(checkin)) {
+    alert("Check-out date must be after the check-in date.");
+    return;
+  }
+  // --- End of added code ---
 
   const user = auth.currentUser;
   if (!user) {
@@ -17,7 +24,6 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
   }
 
   try {
-    // ✅ Fetch the room first
     const roomRef = doc(db, "room", roomId);
     const roomSnap = await getDoc(roomRef);
 
@@ -28,11 +34,10 @@ document.getElementById("booking-form").addEventListener("submit", async (e) => 
 
     const room = roomSnap.data();
 
-    // ✅ Add booking with room details
     await addDoc(collection(db, "bookings"), {
       userId: user.uid,
-      userName: user.displayName || user.email.split("@")[0], // fallback if no displayName
-  userEmail: user.email,
+      userName: user.displayName || user.email.split("@")[0],
+      userEmail: user.email,
       roomId,
       roomName: room.name || "Unnamed Room",
       roomType: room.type || "N/A",
