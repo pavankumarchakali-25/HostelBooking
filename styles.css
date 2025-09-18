@@ -226,3 +226,8 @@ form + p a {
     margin: 20px 15px;
   }
 }
+
+nav a.active{
+  color: var(--primary-colour);
+  font-weight:600;
+} 
