@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Complete Your Payment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .summary-card {
+      background-color: var(--background-dark);
+      padding: 25px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .price-details p {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .price-details .total {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      border-top: 1px solid var(--border-color);
+      padding-top: 15px;
+    }
+    #pay-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Complete Your Payment</h1>
+  </header>
+
+  <div class="container">
+    <div id="payment-summary">
+      <p>Loading summary...</p>
+    </div>
+  </div>
+
+  <script type="module" src="./payment.js"></script>
+</body>
+</html>
