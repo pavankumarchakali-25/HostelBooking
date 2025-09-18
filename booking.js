@@ -1,61 +1,23 @@
-import { auth, db } from "./firebase-config.js";
-import { addDoc, collection,updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+// The NEW booking.js
 
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("id");
-
-document.getElementById("booking-form").addEventListener("submit", async (e) => {
+// This event listener will now redirect to the payment page
+document.getElementById("booking-form").addEventListener("submit", (e) => {
   e.preventDefault();
+
+  // Get the room ID from the current URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get("id");
+
+  // Get the dates from the form
   const checkin = document.getElementById("checkin").value;
   const checkout = document.getElementById("checkout").value;
-  
-  // --- Start of added code ---
+
+  // Validate dates
   if (new Date(checkout) <= new Date(checkin)) {
     alert("Check-out date must be after the check-in date.");
     return;
   }
-  // --- End of added code ---
 
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Please login to book.");
-    window.location.href = "login.html";
-    return;
-  }
-
-  try {
-    const roomRef = doc(db, "room", roomId);
-    const roomSnap = await getDoc(roomRef);
-
-    if (!roomSnap.exists()) {
-      alert("❌ Room not found!");
-      return;
-    }
-
-    const room = roomSnap.data();
-
-    await addDoc(collection(db, "bookings"), {
-      userId: user.uid,
-      userName: user.displayName || user.email.split("@")[0],
-      userEmail: user.email,
-      roomId,
-      roomName: room.name || "Unnamed Room",
-      roomType: room.type || "N/A",
-      checkin,
-      checkout,
-      status: "confirmed",
-      createdAt: new Date()
-    });
-
-    await updateDoc(roomRef, {
-      available: false
-    });
-
-    alert(`✅ Booking confirmed for ${room.name}`);
-    window.location.href = "dashboard.html";
-
-  } catch (err) {
-    console.error("🔥 Error booking room:", err);
-    alert("⚠️ Error booking room. Check console.");
-  }
+  // Redirect to the payment page, passing the data in the URL
+  window.location.href = `payment.html?id=${roomId}&checkin=${checkin}&checkout=${checkout}`;
 });
